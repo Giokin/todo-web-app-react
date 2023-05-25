@@ -1,10 +1,10 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateTodo, destroyTodo } from './store';
+import { updateTodo, destroyTodo, updateUser } from './store';
 import { Link, useParams } from 'react-router-dom';
 
 const Todos = ()=> {
-  const { categories, todos } = useSelector(state => state);
+  const { categories, todos, users } = useSelector(state => state);
   const { term } = useParams();
   const dispatch = useDispatch();
   const filtered = todos.filter(todo => !term || todo.name.includes(term));
@@ -52,6 +52,11 @@ const Todos = ()=> {
                     })
                   }
                 </select>
+                {/* <button onClick={
+                  () => {
+                    dispatch(updateTodo(user.id))
+                  }
+                }>Add User</button> */}
               </li>
             );
           })

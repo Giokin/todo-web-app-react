@@ -1,4 +1,12 @@
+const config = {
+    database: 'todos',
+    dialect: 'postgres',
+    logging: false,
+    password: 'password',
+    username: 'postgres',
+};
+
 const Sequelize = require('sequelize');
-const conn = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost/todo_web_app_db');
+const conn = new Sequelize(config);
 
 module.exports = conn;

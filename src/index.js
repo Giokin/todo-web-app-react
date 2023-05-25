@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios';
 import { Provider, useSelector, useDispatch } from 'react-redux';
-import store, { logout, loginWithToken, socketActions, createTodo, fetchTodos, fetchCategories } from './store';
+import store, { logout, loginWithToken, socketActions, createTodo, fetchTodos, fetchCategories, fetchUsers } from './store';
 import { Link, HashRouter, Routes, Route } from 'react-router-dom';
 
 import Categories from './Categories';
@@ -13,10 +13,11 @@ import CategoryCreate from './CategoryCreate';
 import Search from './Search';
 import Login from './Login';
 import Register from './Register';
+import Users from './Users';
 
 
 function App() {
-  const {todos, categories, auth} = useSelector(state => state);
+  const {todos, categories, auth, users} = useSelector(state => state);
   const dispatch = useDispatch();
 
   React.useEffect(()=> {
@@ -37,6 +38,7 @@ function App() {
   React.useEffect(()=> {
     dispatch(fetchTodos());
     dispatch(fetchCategories());
+    dispatch(fetchUsers());
   }, []);
 
 
@@ -63,6 +65,7 @@ function App() {
               <Route path='/categories/create' element={ <CategoryCreate /> } />
             </Routes>
             <Categories />
+            <Users />
           </>
         ): (
           <>

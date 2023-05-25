@@ -79,6 +79,45 @@ app.get('/api/todos', async(req, res, next)=> {
   }
 });
 
+app.get('/api/users', async(req, res, next)=> {
+  try {
+    const users = await User.findAll();
+    res.send(users);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.post('/api/users', async(req, res, next)=> {
+  try {
+    //look for header to find out user
+    //that user can own the todo
+    const users = await User.create(req.body);
+    res.send(users);
+    sockets.forEach( socket => {
+      socket.send(JSON.stringify({ type: 'USER_CREATE', payload: users}));
+    });
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.delete('/api/users/:id', async(req, res, next)=> {
+  try {
+    const user = await User.findByPk(req.params.id);
+    await user.destroy();
+    res.sendStatus(204);
+    sockets.forEach( socket => {
+      socket.send(JSON.stringify({type: 'USER_DESTROY', payload: user}));
+    });
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 app.delete('/api/todos/:id', async(req, res, next)=> {
   try {
     const todo = await Todo.findByPk(req.params.id);
@@ -143,6 +182,20 @@ app.put('/api/todos/:id', async(req, res, next)=> {
     res.send(todo);
     sockets.forEach( socket => {
       socket.send(JSON.stringify({ type: 'TODO_UPDATE', payload: todo}));
+    });
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.put('/api/users/:id', async(req, res, next)=> {
+  try {
+    const user = await User.findByPk(req.params.id);
+    await user.update(req.body);
+    res.send(user);
+    sockets.forEach( socket => {
+      socket.send(JSON.stringify({ type: 'USER_UPDATE', payload: user}));
     });
   }
   catch(ex){

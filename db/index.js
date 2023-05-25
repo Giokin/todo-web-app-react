@@ -8,6 +8,9 @@ const bcrypt = require('bcrypt');
 Todo.belongsTo(Category);
 Category.hasMany(Todo);
 
+Todo.belongsTo(User);
+User.hasMany(Todo);
+
 const seedData = async()=> {
   const categories = await Promise.all([
     Category.create({ name: 'pets'}),
@@ -21,7 +24,7 @@ const seedData = async()=> {
     Todo.create({ name: 'walk the dog', categoryId: pets.id}),
     Todo.create({ name: 'buy a chew toy', categoryId: pets.id}),
     Todo.create({ name: 'learn react', categoryId: learning.id}),
-    Todo.create({ name: 'take out garbage', categoryId: chores.id })
+    Todo.create({ name: 'take out garbage', categoryId: chores.id})
   ]);
 
   const moePassword = await bcrypt.hash('MOE123', 5);
